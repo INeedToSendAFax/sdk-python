@@ -56,7 +56,8 @@ def test_malformed_header():
 
 def test_tampered_body():
     ts = str(int(time.time()))
-    header = f"t={ts},v1={sign('whsec', ts, b'{\"id\":\"abc\"}')}"
+    signed = b'{"id":"abc"}'
+    header = f"t={ts},v1={sign('whsec', ts, signed)}"
     with pytest.raises(SignatureVerificationError):
         verify_webhook("whsec", header, b'{"id":"evil"}')
 
